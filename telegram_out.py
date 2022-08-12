@@ -1,18 +1,20 @@
 from telethon.sync import TelegramClient
 from telethon.sessions import StringSession
-from telethon import TelegramClient, events
+from telethon import TelegramClient, events, types
 import to_vk
 
 API_ID = '14260225'
 API_HASH = '587676597964ac0bbf1fc20a243877be'
-SESSION_STRING = '1ApWapzMBu2jQgNL6zw-yll70DuiSyVEq-0HvTXObRIKQmmTHnfF-ZoGIEEmY0luWAv-5WhIPtApKiMus6-dxNR59yDcN4h2X249RnMrDWG0bhAb6_8dVNtqBwiI33D_8v-7fX7sAe6oOf5hZ22vHkWyTh2eS82JGC25VM44N7pgazgsR5uyAZIPKvHDKHhYNxNf0hAje0qHBjykZdSXwXHv_JXIqYCbh-dLkWLPwz_5_EPyJ0kjqfc3Yq3W4BuD658RtNEEqK4jo0fq_hN2LGBx2w_1CoFH-e1Xgjmm-jBgUlZML37K7E294Ps4iQ6IHfrfjIyggBtFPXtzww_s2uFklQMefOoY='
+SESSION_STRING = '1ApWapzMBu0uLaL7_8_SDe4tAKec3Hla-ZDv400c1lwomczr5ePcaB0FXX6DE7NkXc-Zmd8NwL_97v9c8p54nB3MGnr668bpx5G1pLP-GRsZhKbDNk5-49a0ZCo5WTPsFSMO5TrqnOCuoLk-w70UOGDft322vhYxp9eZYQHcl9SwTP6YSz7lt6lTOfrTWR0QV3ovMY2QOB2hesQAHl1mbOww-YOGgBeS6B3GI53rrjjJvsx6nP0pMZ5oUK1Z6g2Ye2SnG6O7bJufkdDZjCwHEROI3LzXBeFg3SKZVBUxydmO1O-JGbFHs_PL8bAQ0Sf_10g9AIIXZPogiNdEw4qsCQjHCl9Ky68Y='
 
-#id, message=prinyalotvk()
 
 client = TelegramClient(StringSession(SESSION_STRING), API_ID, API_HASH)
 client.start()
-
-@client.on(events.NewMessage)
+me=client.get_me()
+chat=types.PeerChannel(1714740849)
+@client.on(events.NewMessage(chat))
 async def normal_handler(event):
-    pass
-    to_vk.write_msg(event.message)
+    if event.message.sender_id!=me.id:
+        to_vk.write_msg(event.message.message)
+
+client.run_until_disconnected()
